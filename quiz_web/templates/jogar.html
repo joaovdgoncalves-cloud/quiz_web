@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Jogando &middot; Quiz{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+
+    <div class="d-flex justify-content-between align-items-center mb-2 text-white">
+      <span class="badge text-bg-dark badge-round fs-6">
+        <i class="bi bi-patch-question me-1"></i>
+        Pergunta <span id="q-num">{{ numero }}</span> / {{ total }}
+      </span>
+      <span id="scoreboard" class="scoreboard fs-6">
+        <i class="bi bi-star-fill text-warning"></i>
+        <span class="score-value" id="score-value">{{ pontuacao }}</span>
+      </span>
+    </div>
+
+    <div class="progress mb-2" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+      <div class="progress-bar" style="width: {{ (numero - 1) / total * 100 }}%"></div>
+    </div>
+
+    <div class="timer-wrap mb-4">
+      <div id="timer-bar" class="timer-bar"></div>
+    </div>
+
+    <div id="quiz-card" class="card">
+      <div class="card-body p-4 p-md-5">
+        <h2 class="h4 mb-4 text-center">{{ pergunta.enunciado }}</h2>
+
+        <form id="quiz-form" action="{{ url_for('responder') }}" method="post">
+          <div class="d-grid gap-3 mb-4">
+            {% for opcao in pergunta.opcoes %}
+              <label class="opcao-btn" data-index="{{ loop.index0 }}">
+                <span class="opcao-letra">{{ "ABCDEF"[loop.index0] }}</span>
+                <span class="flex-grow-1">{{ opcao }}</span>
+                <input
+                  class="form-check-input visually-hidden"
+                  type="radio"
+                  name="opcao"
+                  value="{{ loop.index0 }}"
+                  {% if loop.first %}checked{% endif %}>
+              </label>
+            {% endfor %}
+          </div>
+          <div class="text-center">
+            <button id="btn-responder" type="submit" class="btn btn-primary btn-lg">
+              <i class="bi bi-check2-circle me-1"></i> Responder
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{# Feedback da rodada anterior entregue pelo servidor. #}
+{% if feedback %}
+<script>
+  window.__FEEDBACK__ = {
+    acertou: {{ 'true' if feedback.acertou else 'false' }},
+    correta: {{ feedback.opcao_correta | tojson }}
+  };
+</script>
+{% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+(() => {
+  const TEMPO_SEGUNDOS = 20;
+  const form = document.getElementById("quiz-form");
+  const btn  = document.getElementById("btn-responder");
+  const timer = document.getElementById("timer-bar");
+  const opcoes = document.querySelectorAll(".opcao-btn");
+  const card = document.getElementById("quiz-card");
+
+  // --- Feedback da pergunta anterior (confetti / shake) ---
+  if (window.__FEEDBACK__) {
+    if (window.__FEEDBACK__.acertou) {
+      try { SFX.correct(); } catch (e) {}
+      confetti({
+        particleCount: 90,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#f59e0b", "#22c55e", "#3b82f6", "#ec4899"]
+      });
+    } else {
+      try { SFX.wrong(); } catch (e) {}
+      card.classList.add("animate__animated", "animate__headShake");
+    }
+  }
+
+  // --- Seleção visual das opções ---
+  opcoes.forEach(btnO => {
+    const input = btnO.querySelector("input");
+    if (input.checked) btnO.classList.add("selected");
+    btnO.addEventListener("click", () => {
+      opcoes.forEach(o => o.classList.remove("selected"));
+      btnO.classList.add("selected");
+      input.checked = true;
+      try { SFX.click(); } catch (e) {}
+    });
+  });
+
+  // --- Timer visual + autossubmissão ---
+  const inicio = performance.now();
+  function tick() {
+    const transcorrido = (performance.now() - inicio) / 1000;
+    const restante = Math.max(0, TEMPO_SEGUNDOS - transcorrido);
+    const pct = (restante / TEMPO_SEGUNDOS) * 100;
+    timer.style.width = pct + "%";
+    if (restante <= 5 && Math.floor(transcorrido * 2) % 2 === 0) {
+      try { SFX.tick(); } catch (e) {}
+    }
+    if (restante <= 0) {
+      form.submit();
+      return;
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  // --- Submissão com som ---
+  form.addEventListener("submit", () => {
+    btn.disabled = true;
+    try { SFX.click(); } catch (e) {}
+  });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Gerenciar Perguntas &middot; Quiz{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header bg-white border-0 pt-3 pb-0">
+        <h2 class="h6 mb-0">
+          <i class="bi bi-plus-square me-1"></i>
+          Cadastrar nova pergunta
+        </h2>
+      </div>
+      <div class="card-body">
+        <form action="{{ url_for('admin') }}" method="post">
+          <div class="mb-3">
+            <label for="enunciado" class="form-label">Enunciado</label>
+            <textarea
+              class="form-control"
+              id="enunciado"
+              name="enunciado"
+              rows="2"
+              placeholder="Ex.: Qual estrutura usa o princípio LIFO?"
+              required>{{ form.enunciado if form else "" }}</textarea>
+          </div>
+
+          <p class="form-label mb-1">Alternativas</p>
+          <small class="text-muted d-block mb-2">
+            Preencha pelo menos 2 alternativas. Marque o rádio na alternativa correta.
+          </small>
+
+          {% set opcoes = form.opcoes if form else [] %}
+          {% set correta = form.correta if form else 0 %}
+          {% for i in range(1, 7) %}
+            <div class="input-group mt-2">
+              <div class="input-group-text">
+                <input
+                  class="form-check-input mt-0"
+                  type="radio"
+                  name="correta"
+                  value="{{ loop.index0 }}"
+                  {% if correta == loop.index0 %}checked{% endif %}
+                  aria-label="Marcar como correta">
+              </div>
+              <span class="input-group-text fw-bold">{{ "ABCDEF"[loop.index0] }}</span>
+              <input
+                type="text"
+                class="form-control"
+                name="opcao_{{ i }}"
+                value="{{ opcoes[loop.index0] if opcoes|length > loop.index0 else '' }}"
+                placeholder="Alternativa {{ i }}">
+            </div>
+          {% endfor %}
+
+          <div class="d-flex gap-2 mt-3">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-plus-lg me-1"></i> Cadastrar
+            </button>
+            <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+              Voltar
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header bg-white border-0 pt-3 pb-0 d-flex justify-content-between align-items-center">
+        <h2 class="h6 mb-0">
+          <i class="bi bi-list-ul me-1"></i>
+          Perguntas cadastradas
+          <small class="text-muted fw-normal">(Lista global)</small>
+        </h2>
+        <span class="badge text-bg-dark badge-round">{{ perguntas|length }}</span>
+      </div>
+      <ul class="list-group list-group-flush">
+        {% for p in perguntas %}
+          <li class="list-group-item historico-item">
+            <div class="small text-muted">#{{ p.id }}</div>
+            <div class="fw-semibold">{{ p.enunciado }}</div>
+            <ol class="mb-0 mt-1 small ps-3">
+              {% for opcao in p.opcoes %}
+                <li class="{{ 'text-success fw-semibold' if loop.index0 == p.correta else 'text-muted' }}">
+                  {{ opcao }}{% if loop.index0 == p.correta %} <em>(correta)</em>{% endif %}
+                </li>
+              {% endfor %}
+            </ol>
+          </li>
+        {% else %}
+          <li class="list-group-item text-muted">
+            Nenhuma pergunta cadastrada ainda.
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

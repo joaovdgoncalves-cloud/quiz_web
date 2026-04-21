@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Início &middot; Quiz de Estruturas{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card p-4 p-lg-5 text-center">
+      <div class="mb-3">
+        <span class="emoji-bounce" style="font-size:3rem">🎮</span>
+      </div>
+      <h1 class="hero-title mb-3">Quiz de Estruturas de Dados</h1>
+      <p class="lead mb-2">
+        Desafie-se em <strong>Listas</strong>, <strong>Filas</strong>,
+        <strong>Pilhas</strong> e <strong>Dicionários</strong>.
+      </p>
+      <p class="text-muted mb-4">
+        Cada acerto vale <strong>+10 pontos</strong>.
+        Cuidado com o tempo — cada pergunta tem um limite!
+      </p>
+
+      <div class="d-flex justify-content-center gap-3 flex-wrap mb-4">
+        <span class="badge text-bg-light badge-round">
+          <i class="bi bi-collection me-1"></i>
+          {{ total_perguntas }} pergunta(s) cadastrada(s)
+        </span>
+        <span class="badge text-bg-light badge-round">
+          <i class="bi bi-stopwatch me-1"></i> 20s por pergunta
+        </span>
+      </div>
+
+      <div class="d-flex justify-content-center gap-2 flex-wrap">
+        <form action="{{ url_for('iniciar') }}" method="post">
+          <button class="btn btn-primary btn-lg btn-pulse" type="submit"
+                  onclick="try{SFX.click()}catch(e){}">
+            <i class="bi bi-play-fill me-1"></i> Jogar agora
+          </button>
+        </form>
+        <a class="btn btn-outline-secondary btn-lg" href="{{ url_for('admin') }}">
+          <i class="bi bi-plus-circle me-1"></i> Gerenciar perguntas
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
