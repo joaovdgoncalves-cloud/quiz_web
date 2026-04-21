@@ -69,7 +69,7 @@ def criar_app() -> Flask:
 
   
     # Tela de jogo
-    -
+    
     @app.route("/jogar")
     def jogar():
         estado = obter_estado()
