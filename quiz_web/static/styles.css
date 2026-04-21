@@ -20,7 +20,7 @@ body {
   background: linear-gradient(-45deg, var(--game-bg-1), var(--game-bg-2),
                               var(--game-bg-3), var(--game-bg-1));
   background-size: 400% 400%;
-  animation: bgShift 18s ease infinite;
+  animation: bgShift 2s ease infinite;
   color: #7e0000;
 }
 
@@ -337,3 +337,4 @@ footer {
     transition-duration: .001s !important;
   }
 }
+
