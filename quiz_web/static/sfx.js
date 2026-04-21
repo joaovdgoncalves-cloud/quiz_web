@@ -1,7 +1,7 @@
-/* =================================================================
+/*
  * sfx.js — efeitos sonoros leves via Web Audio API
  * (sem arquivos externos; bipes gerados on the fly)
- * ================================================================= */
+ */
 const SFX = (() => {
   let ctx = null;
   function getCtx() {

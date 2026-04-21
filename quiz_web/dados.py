@@ -16,12 +16,10 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional
 
 
-# =============================================================================
 # ESTRUTURA DE DADOS: LISTA
-# -----------------------------------------------------------------------------
+
 # Repositório global de perguntas cadastradas. Cada pergunta é um dict
 # com as chaves: id, enunciado, opcoes (lista), correta (índice 0-based).
-# =============================================================================
 PERGUNTAS: List[Dict[str, Any]] = [
     {
         "id": 1,
@@ -56,12 +54,11 @@ PERGUNTAS: List[Dict[str, Any]] = [
 ]
 
 
-# =============================================================================
+
 # ESTRUTURA DE DADOS: DICIONÁRIO (HASH MAP)
-# -----------------------------------------------------------------------------
 # Mapeia id_pergunta -> índice da resposta correta. Permite validação
 # O(1) quando o usuário envia uma resposta a partir do formulário.
-# =============================================================================
+
 RESPOSTAS_CORRETAS: Dict[int, int] = {p["id"]: p["correta"] for p in PERGUNTAS}
 
 

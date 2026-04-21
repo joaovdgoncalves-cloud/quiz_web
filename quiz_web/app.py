@@ -44,9 +44,9 @@ def criar_app() -> Flask:
     app = Flask(__name__)
     app.secret_key = "oficina-git-quiz-estruturas"  # apenas para flash messages
 
-    # -------------------------------------------------------------------
+   
     # Página inicial
-    # -------------------------------------------------------------------
+    
     @app.route("/")
     def home() -> str:
         return render_template(
@@ -114,9 +114,9 @@ def criar_app() -> Flask:
             return redirect(url_for("resultado"))
         return redirect(url_for("jogar"))
 
-    # -------------------------------------------------------------------
+    
     # Resultado final
-    # -------------------------------------------------------------------
+    
     @app.route("/resultado")
     def resultado():
         estado = obter_estado()
@@ -136,9 +136,9 @@ def criar_app() -> Flask:
             historico=historico,
         )
 
-    # -------------------------------------------------------------------
+
     # Área administrativa
-    # -------------------------------------------------------------------
+    
     @app.route("/admin", methods=["GET", "POST"])
     def admin():
         if request.method == "POST":
