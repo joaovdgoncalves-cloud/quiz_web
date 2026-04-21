@@ -114,7 +114,7 @@ main, nav, footer {
 .hero-title {
   font-size: 2.4rem;
   font-weight: 800;
-  background: linear-gradient(90deg, #f59e0b, #ef4444, #ec4899, #8b5cf6);
+  background: linear-gradient(90deg, #ffffff, #000000, #000000, #ffffff);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
