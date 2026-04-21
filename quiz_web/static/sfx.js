@@ -12,7 +12,7 @@ const SFX = (() => {
     return ctx;
   }
 
-  function tone(freq, duration, type = "sine", volume = 0.15) {
+  function tone(freq, duration, type = "sine", volume = 0.7) {
     const c = getCtx();
     if (!c) return;
     const osc = c.createOscillator();
