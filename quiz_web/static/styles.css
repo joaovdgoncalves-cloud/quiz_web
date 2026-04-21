@@ -21,7 +21,7 @@ body {
                               var(--game-bg-3), var(--game-bg-1));
   background-size: 400% 400%;
   animation: bgShift 18s ease infinite;
-  color: #0f172a;
+  color: #7e0000;
 }
 
 body::before {
@@ -114,7 +114,7 @@ main, nav, footer {
 .hero-title {
   font-size: 2.4rem;
   font-weight: 800;
-  background: linear-gradient(90deg, #ffffff, #000000, #000000, #ffffff);
+  background: linear-gradient(#000000, #000000);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
